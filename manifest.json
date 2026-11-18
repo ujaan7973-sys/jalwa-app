@@ -1,0 +1,10 @@
+{
+  "name": "Jalwa - Apna Jalwa Dikhao",
+  "short_name": "Jalwa",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#0f0f0f",
+  "icons": [{ "src": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=512", "sizes": "512x512", "type": "image/jpeg" }]
+}
