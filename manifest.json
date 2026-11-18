@@ -1,10 +1,80 @@
 {
   "name": "Jalwa - Apna Jalwa Dikhao",
   "short_name": "Jalwa",
-  "start_url": "./index.html",
+  "description": "Pakistan ki apni TikTok jesi app - Reels, Live, Chat, Ads, Coins aur Kamai. Apna Jalwa Dikhao!",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#000000",
-  "theme_color": "#0f0f0f",
-  "icons": [{ "src": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=512", "sizes": "512x512", "type": "image/jpeg" }]
+  "theme_color": "#ec4899",
+  "lang": "ur",
+  "categories": [
+    "entertainment",
+    "social",
+    "photo",
+    "video"
+  ],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Jalwa Home"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Jalwa Reels"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Live Jao",
+      "url": "/?live=1",
+      "description": "Live shuru karo"
+    },
+    {
+      "name": "Reels Dekho",
+      "url": "/?reels=1",
+      "description": "Reels dekho"
+    }
+  ],
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
+  "launch_handler": {
+    "client_mode": "auto"
+  }
 }
