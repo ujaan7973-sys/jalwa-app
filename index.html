@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Jalwa - Apna Jalwa Dikhao</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f0f0f">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{background:#000;color:#fff;font-family:system-ui}
+.no-scrollbar::-webkit-scrollbar{display:none}
+.reel{height:100dvh;position:relative;scroll-snap-align:start}
+.kenburns{animation:kb 18s infinite alternate}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.12)}}
+.live-dot{animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.3}}
+</style>
+</head>
+<body>
+<!-- LOGIN -->
+<div id="loginScreen" class="min-h-[100dvh] flex flex-col items-center justify-center px-6 bg-[#0f0f0f]">
+  <div class="w-full max-w-[400px]">
+    <div class="text-center mb-6">
+      <div class="text-5xl font-black">JAL<span class="text-pink-500">WA</span> 🔥</div>
+      <p class="text-zinc-400 text-sm mt-2">Apna Jalwa Dikhao • Reels • Live • Kamai</p>
+      <p class="bg-pink-600 inline-block px-3 py-1 rounded-full text-xs font-bold mt-3">FREE Coins 500</p>
+    </div>
+    <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5">
+      <div class="flex bg-zinc-800 rounded-full p-1 mb-4">
+        <button id="tabMobile" onclick="switchLogin('mobile')" class="flex-1 py-2.5 rounded-full bg-white text-black font-bold text-sm">Mobile Number</button>
+        <button id="tabGmail" onclick="switchLogin('gmail')" class="flex-1 py-2.5 rounded-full font-bold text-sm">Gmail</button>
+      </div>
+      <div id="mobileBox">
+        <input id="phoneInput" placeholder="03xx-xxxxxxx" class="w-full bg-zinc-800 rounded-2xl px-4 py-3.5 outline-none">
+        <button onclick="sendOTP()" class="w-full mt-3 bg-zinc-700 py-3 rounded-2xl font-bold">OTP Bhejo</button>
+        <div id="otpBox" class="hidden mt-3"><input id="otpInput" placeholder="OTP: 1234" class="w-full bg-zinc-800 rounded-2xl px-4 py-3.5 outline-none"></div>
+        <button onclick="loginWithMobile()" class="w-full mt-4 bg-gradient-to-r from-pink-600 to-red-600 py-3.5 rounded-2xl font-black">LOGIN</button>
+      </div>
+      <div id="gmailBox" class="hidden">
+        <input id="gmailInput" placeholder="tumhara@gmail.com" class="w-full bg-zinc-800 rounded-2xl px-4 py-3.5 outline-none">
+        <input id="nameInput" placeholder="Apna Naam" class="w-full mt-3 bg-zinc-800 rounded-2xl px-4 py-3.5 outline-none">
+        <button onclick="loginWithGmail()" class="w-full mt-4 bg-white text-black py-3.5 rounded-2xl font-black">G Gmail se Login</button>
+      </div>
+      <button onclick="guestLogin()" class="w-full mt-3 text-zinc-400 text-sm underline">Guest ke tor pe dekho</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appScreen" class="hidden max-w-[430px] mx-auto relative bg-black min-h-[100dvh] pb-[80px]">
+  <div class="sticky top-0 z-40 bg-black/90 px-3 py-2.5 flex justify-between items-center border-b border-zinc-800">
+    <div class="font-black text-xl">JAL<span class="text-pink-500">WA</span></div>
+    <div class="flex bg-zinc-900 rounded-full p-1 text-[13px] font-bold">
+      <button onclick="showTab('foryou')" id="btnForyou" class="px-3 py-1.5 rounded-full bg-white text-black">For You</button>
+      <button onclick="showTab('live')" id="btnLive" class="px-3 py-1.5 rounded-full text-red-400">● LIVE</button>
+    </div>
+    <button onclick="openWallet()" class="bg-yellow-400 text-black px-3 py-1.5 rounded-full font-black text-sm">🪙 <span id="coinTop">500</span></button>
+  </div>
+
+  <div id="feedSection"><div id="reelsContainer" class="flex flex-col gap-3 px-2 pt-2"></div>
+    <div class="px-3 py-4"><div class="bg-gradient-to-r from-pink-600 to-red-600 rounded-3xl p-4">
+      <div class="font-black">Ad Dekho, 50 Coins Muft Pao 🪙</div>
+      <button onclick="watchRewardedAd()" class="mt-3 bg-white text-black px-4 py-2.5 rounded-full font-bold w-full">▶ Ad Dekho +50 Coins</button>
+      <p id="adCountText" class="text-xs mt-2">Aaj: 0 / 3 ads</p></div></div>
+  </div>
+
+  <div id="liveSection" class="hidden px-3 pt-3">
+    <button onclick="startMyLive()" class="w-full bg-red-600 py-3.5 rounded-2xl font-black">🔴 LIVE JAO</button>
+    <p class="text-xs text-zinc-400 mt-2 text-center">Gift pe 60% tumhara, 40% app ka.</p>
+    <div id="liveGrid" class="grid grid-cols-2 gap-3 mt-4"></div>
+    <div id="myLiveBox" class="hidden mt-4 bg-zinc-900 rounded-3xl overflow-hidden border border-red-500/50">
+      <div class="relative"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800" class="w-full h-[300px] object-cover">
+      <div class="absolute top-3 left-3 bg-red-600 px-2.5 py-1 rounded-full text-xs font-black"><span class="live-dot">●</span> LIVE • <span id="myLiveViewers">124</span></div>
+      <div class="absolute top-3 right-3 bg-black/70 px-3 py-1.5 rounded-full text-sm font-bold">Kamai: Rs <span id="myLiveEarning">0</span></div></div>
+      <div class="p-4"><div id="liveChatBox" class="bg-black rounded-2xl p-3 h-[110px] overflow-y-auto text-sm"></div>
+      <div class="flex gap-2 mt-3"><input id="liveChatInput" placeholder="Live me likho..." class="flex-1 bg-zinc-800 rounded-full px-4 py-2.5 outline-none"><button onclick="sendLiveChat()" class="bg-pink-600 px-4 rounded-full font-bold">Bhejo</button></div>
+      <div class="flex gap-2 mt-3">
+        <button onclick="sendGift('Rose',10)" class="flex-1 bg-zinc-800 py-2.5 rounded-full text-sm">🌹 10</button>
+        <button onclick="sendGift('Heart',50)" class="flex-1 bg-zinc-800 py-2.5 rounded-full text-sm">❤️ 50</button>
+        <button onclick="sendGift('Diamond',200)" class="flex-1 bg-zinc-800 py-2.5 rounded-full text-sm">💎 200</button>
+        <button onclick="sendGift('Lion',1000)" class="flex-1 bg-yellow-500 text-black py-2.5 rounded-full text-sm font-bold">🦁 1000</button>
+      </div></div>
+    </div>
+  </div>
+
+  <div id="discoverSection" class="hidden px-3 pt-3">
+    <input placeholder="🔍 Search..." class="w-full bg-zinc-900 rounded-full px-4 py-3 outline-none">
+    <div class="bg-zinc-900 border border-yellow-500/30 rounded-3xl p-3 mt-4 flex gap-3 items-center">
+      <div class="flex-1"><span class="text-[10px] bg-yellow-400 text-black px-2 py-0.5 rounded-full font-bold">SPONSORED AD</span><div class="font-bold mt-1">Karachi Biryani House</div><div class="text-xs text-zinc-400">Best Biryani - 300 Rs</div></div>
+      <button class="bg-yellow-400 text-black px-3 py-2 rounded-full text-xs font-black">Shop Now</button></div>
+    <div class="bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl p-4 mt-3"><div class="font-black">Dost ko Bulao, 200 Coins Pao</div><p class="text-sm">Code: <b>JALWA786</b></p><button onclick="inviteFriend()" class="mt-2 bg-white text-black px-4 py-2 rounded-full font-bold w-full">Invite Karo +200</button></div>
+    <button onclick="openAdvertise()" class="w-full mt-3 bg-zinc-900 border border-zinc-700 py-3 rounded-2xl font-bold">📢 Apna Ad Chalao</button>
+    <div id="discoverGrid" class="grid grid-cols-3 gap-1.5 mt-4"></div>
+  </div>
+
+  <div id="chatSection" class="hidden px-3 pt-3"><h2 class="font-black text-xl">Chat 💬</h2><div id="chatList" class="mt-3 space-y-2"></div>
+    <div id="chatWindow" class="hidden mt-3 bg-zinc-900 rounded-3xl p-3"><div class="flex gap-2 pb-2 border-b border-zinc-800"><button onclick="closeChat()">←</button><b id="chatWithName">Ali</b></div><div id="chatMessages" class="h-[280px] overflow-y-auto py-3 space-y-2"></div><div class="flex gap-2"><input id="chatInput" placeholder="Message..." class="flex-1 bg-zinc-800 rounded-full px-4 py-2.5 outline-none"><button onclick="sendChatMsg()" class="bg-pink-600 px-4 rounded-full font-bold">Bhejo</button></div></div></div>
+
+  <div id="profileSection" class="hidden px-3 pt-3">
+    <div class="flex gap-4 items-center"><div class="w-[80px] h-[80px] rounded-full bg-gradient-to-br from-pink-500 to-red-500 flex items-center justify-center text-3xl font-black" id="profileAvatar">J</div><div><div class="font-black text-lg" id="profileName">Jalwa User</div><div class="text-sm text-zinc-400">Karachi se hun | Apna Jalwa Dikhao 🔥</div><button onclick="editProfile()" class="mt-2 bg-zinc-800 px-4 py-1.5 rounded-full text-sm font-bold">Edit Profile</button></div></div>
+    <div class="bg-zinc-900 rounded-3xl p-4 mt-4"><div class="font-black">💰 Meri Kamai</div><div class="grid grid-cols-3 gap-2 mt-3 text-center"><div class="bg-black rounded-2xl p-3"><div class="text-xs text-zinc-400">Gifts</div><b>Rs <span id="earnGifts">0</span></b></div><div class="bg-black rounded-2xl p-3"><div class="text-xs text-zinc-400">Ads</div><b>Rs <span id="earnAds">0</span></b></div><div class="bg-black rounded-2xl p-3"><div class="text-xs text-zinc-400">Total</div><b class="text-green-400">Rs <span id="earnTotal">0</span></b></div></div>
+    <div class="flex gap-2 mt-3"><button onclick="openWallet()" class="flex-1 bg-yellow-400 text-black py-2.5 rounded-full font-bold">🪙 <span id="coinProfile">500</span></button><button onclick="withdrawMoney()" class="flex-1 bg-green-500 py-2.5 rounded-full font-bold">Paise Nikalo</button></div>
+    <button onclick="buyPremium()" class="w-full mt-2 bg-gradient-to-r from-purple-600 to-pink-600 py-2.5 rounded-full font-bold">⭐ Premium 299 Rs / Mahina • No Ads</button></div>
+    <div class="bg-zinc-900 rounded-3xl p-4 mt-3"><div class="font-black">📢 Ads Dashboard (Owner)</div><div class="text-sm text-zinc-400 mt-1">Total Ads Kamai: <b class="text-white">Rs <span id="ownerAdsEarn">0</span></b></div><div class="text-xs mt-1 text-zinc-400">Feed Ad 1000 Rs / din • Banner 500 Rs / din • Live Ad 2000 Rs / din</div><button onclick="openAdvertise()" class="w-full mt-3 bg-white text-black py-2.5 rounded-full font-bold">Apna Ad Chalao</button></div>
+    <div class="font-bold mt-4">Meri Reels</div><div id="profileGrid" class="grid grid-cols-3 gap-1.5 mt-2"></div>
+    <button onclick="logout()" class="w-full mt-6 bg-zinc-800 py-3 rounded-full font-bold">Logout</button>
+  </div>
+
+  <div id="uploadModal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-end justify-center"><div class="w-full max-w-[430px] bg-zinc-900 rounded-t-[28px] p-5"><div class="flex justify-between"><b>Nayi Post 📸</b><button onclick="closeUpload()" class="text-2xl">✕</button></div><input id="uploadCaption" placeholder="Caption..." class="w-full mt-4 bg-zinc-800 rounded-2xl px-4 py-3 outline-none"><button onclick="publishPost()" class="w-full mt-4 bg-gradient-to-r from-pink-600 to-red-600 py-3.5 rounded-2xl font-black">POST KARO 🚀</button></div></div>
+  <div id="walletModal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-end justify-center"><div class="w-full max-w-[430px] bg-zinc-900 rounded-t-[28px] p-5"><div class="flex justify-between"><b>Wallet 🪙</b><button onclick="closeWallet()" class="text-2xl">✕</button></div><div class="bg-yellow-400 text-black rounded-3xl p-4 mt-3 text-center"><div class="text-3xl font-black" id="coinWallet">500</div></div><button onclick="buyCoins(100,200)" class="w-full bg-zinc-800 p-3 rounded-2xl flex justify-between mt-3"><span>100 Coins</span><b>200 Rs</b></button><button onclick="buyCoins(500,800)" class="w-full bg-zinc-800 p-3 rounded-2xl flex justify-between mt-2"><span>500 Coins ⭐</span><b>800 Rs</b></button><button onclick="buyCoins(1000,1500)" class="w-full bg-zinc-800 p-3 rounded-2xl flex justify-between mt-2"><span>1000 Coins</span><b>1500 Rs</b></button><button onclick="watchRewardedAd()" class="w-full bg-pink-600 py-3 rounded-2xl font-bold mt-3">▶ Ad Dekho +50 Coins</button></div></div>
+  <div id="commentModal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-end justify-center"><div class="w-full max-w-[430px] bg-zinc-900 rounded-t-[28px] p-4"><div class="flex justify-between"><b>Comments</b><button onclick="closeComments()" class="text-xl">✕</button></div><div id="commentList" class="py-3 space-y-2 max-h-[300px] overflow-y-auto"></div><div class="flex gap-2"><input id="commentInput" placeholder="Comment..." class="flex-1 bg-zinc-800 rounded-full px-4 py-2.5 outline-none"><button onclick="addComment()" class="bg-pink-600 px-4 rounded-full font-bold">Bhejo</button></div></div></div>
+
+  <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-black/95 border-t border-zinc-800 flex justify-around py-2 z-40">
+    <button onclick="showSection('feed')" class="text-xs flex flex-col items-center"><span class="text-xl">🏠</span>Home</button>
+    <button onclick="showSection('discover')" class="text-xs flex flex-col items-center"><span class="text-xl">🔍</span>Discover</button>
+    <button onclick="openUpload()" class="w-[52px] h-[52px] -mt-6 bg-gradient-to-r from-pink-600 to-red-600 rounded-2xl text-2xl font-black">+</button>
+    <button onclick="showSection('chat')" class="text-xs flex flex-col items-center"><span class="text-xl">💬</span>Chat</button>
+    <button onclick="showSection('profile')" class="text-xs flex flex-col items-center"><span class="text-xl">👤</span>Profile</button>
+  </div>
+</div>
+
+<script>
+let S=JSON.parse(localStorage.getItem('jalwa_v1')||'{}');
+let coins=S.coins??500, earnGifts=S.earnGifts??0, earnAds=S.earnAds??0, ownerAdsEarn=S.ownerAdsEarn??0, adWatched=S.adWatched??0, myName=S.myName||'Jalwa User';
+let liked=new Set(S.liked||[]), followed=new Set(S.followed||[]), currentReel=0, currentChat=null;
+let reels=[
+ {id:1,user:'@SamandarBoy',name:'Samandar Boy',img:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',caption:'Samandar me aaj full maza! 🐟',tags:'#SamandarVibes',likes:12400,comments:[{u:'@Ali',t:'Mashallah!'}]},
+ {id:2,user:'@CricketKing',name:'Cricket King',img:'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=800',caption:'Gali cricket 6 pe 6 chakke 🏏',tags:'#Cricket',likes:8900,comments:[]},
+ {id:3,user:'@BiryaniQueen',name:'Biryani Queen',img:'https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800',caption:'Karachi ki asli biryani 300 Rs 😋',tags:'#BiryaniLove',likes:15200,comments:[]},
+ {id:4,user:'@KarachiNights',name:'Karachi Nights',img:'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800',caption:'Karachi raat ko bhi jagta hai ✨',tags:'#Karachi',likes:6700,comments:[]},
+ {id:5,user:'@ComedyBaba',name:'Comedy Baba',img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800',caption:'Bazaar me comedy 😂',tags:'#Comedy',likes:21000,comments:[]},
+ {id:6,user:'@VillageLife',name:'Village Life',img:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800',caption:'Gaon ki shaam 🌾',tags:'#Pakistan',likes:5400,comments:[]},
+];
+let chats=[{name:'【entity-Ali Khan¦canonical_name=Ali Khan】',last:'Reel dekhi?',msgs:[{me:false,t:'Reel dekhi?'}]},{name:'Sara Ahmed',last:'Live kab?',msgs:[{me:false,t:'Live kab?'}]},{name:'Ahmed Raza',last:'Viral ho gayi',msgs:[{me:false,t:'Viral ho gayi'}]}];
+function save(){localStorage.setItem('jalwa_v1',JSON.stringify({coins,earnGifts,earnAds,ownerAdsEarn,adWatched,myName,liked:[...liked],followed:[...followed]}));updateCoins();}
+function updateCoins(){document.querySelectorAll('#coinTop,#coinProfile,#coinWallet').forEach(e=>e.textContent=coins);document.getElementById('earnGifts').textContent=earnGifts;document.getElementById('earnAds').textContent=earnAds;document.getElementById('earnTotal').textContent=earnGifts+earnAds;document.getElementById('ownerAdsEarn').textContent=ownerAdsEarn+earnAds;document.getElementById('adCountText').textContent=`Aaj: ${adWatched} / 3 ads`;}
+function switchLogin(t){document.getElementById('mobileBox').classList.toggle('hidden',t!=='mobile');document.getElementById('gmailBox').classList.toggle('hidden',t!=='gmail');document.getElementById('tabMobile').className=t==='mobile'?'flex-1 py-2.5 rounded-full bg-white text-black font-bold text-sm':'flex-1 py-2.5 rounded-full font-bold text-sm';document.getElementById('tabGmail').className=t==='gmail'?'flex-1 py-2.5 rounded-full bg-white text-black font-bold text-sm':'flex-1 py-2.5 rounded-full font-bold text-sm';}
+function sendOTP(){document.getElementById('otpBox').classList.remove('hidden');alert('OTP: 1234');}
+function doLogin(n){myName=n;save();document.getElementById('loginScreen').classList.add('hidden');document.getElementById('appScreen').classList.remove('hidden');document.getElementById('profileName').textContent=myName;document.getElementById('profileAvatar').textContent=myName[0].toUpperCase();renderReels();}
+function loginWithMobile(){if(!document.getElementById('phoneInput').value){alert('Number likho');return;} if(document.getElementById('otpInput').value!=='1234'){alert('OTP 1234 likho');return;} doLogin('Jalwa User');}
+function loginWithGmail(){if(!document.getElementById('gmailInput').value){alert('Gmail likho');return;} doLogin(document.getElementById('nameInput').value||'Jalwa User');}
+function guestLogin(){doLogin('Guest User');}
+function logout(){localStorage.removeItem('jalwa_v1');location.reload();}
+function renderReels(){let c=document.getElementById('reelsContainer');c.innerHTML='';reels.forEach((r,idx)=>{let lk=liked.has(r.id),fl=followed.has(r.id),isAd=idx===2;c.innerHTML+=`<div class="reel rounded-[28px] overflow-hidden bg-zinc-900 relative" ondblclick="likeReel(${r.id})"><img src="${r.img}" class="absolute inset-0 w-full h-full object-cover kenburns"><div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>${isAd?'<div class="absolute top-3 left-3 bg-yellow-400 text-black px-2 py-1 rounded-full text-[10px] font-black">SPONSORED • AD</div>':''}<div class="absolute bottom-0 left-0 right-0 p-4 flex justify-between items-end"><div class="flex-1"><div class="flex items-center gap-2"><div class="w-9 h-9 rounded-full bg-pink-600 flex items-center justify-center font-black">${r.name[0]}</div><b>${r.user}</b><button onclick="toggleFollow(${r.id})" class="px-3 py-1 rounded-full text-xs font-bold ${fl?'bg-zinc-700':'bg-white text-black'}">${fl?'Following':'Follow'}</button></div><p class="text-sm mt-2">${r.caption}</p><p class="text-pink-300 text-xs font-bold">${r.tags}</p>${isAd?'<button class="mt-2 bg-yellow-400 text-black px-4 py-2 rounded-full text-xs font-black">Shop Now →</button>':''}</div><div class="flex flex-col gap-4 items-center"><button onclick="likeReel(${r.id})" class="flex flex-col items-center"><span class="text-3xl">${lk?'❤️':'🤍'}</span><b class="text-xs">${(r.likes+(lk?1:0)).toLocaleString()}</b></button><button onclick="openComments(${r.id})" class="flex flex-col items-center"><span class="text-3xl">💬</span><b class="text-xs">${r.comments.length}</b></button><button class="text-2xl">↗️</button></div></div></div>`;});document.getElementById('discoverGrid').innerHTML=reels.map(r=>`<img src="${r.img}" class="w-full h-[130px] object-cover rounded-xl">`).join('');document.getElementById('profileGrid').innerHTML=reels.slice(0,6).map(r=>`<img src="${r.img}" class="w-full h-[120px] object-cover rounded-xl">`).join('');document.getElementById('liveGrid').innerHTML=reels.slice(0,4).map((r,i)=>`<div onclick="joinLive('${r.name}')" class="relative rounded-3xl overflow-hidden"><img src="${r.img}" class="w-full h-[200px] object-cover"><div class="absolute top-2 left-2 bg-red-600 px-2 py-0.5 rounded-full text-[10px] font-black">● LIVE</div><div class="absolute bottom-0 p-2 bg-gradient-to-t from-black w-full"><b class="text-sm">${r.name}</b><div class="text-xs">${(1+i*0.7).toFixed(1)}K dekh rahe hain</div></div></div>`).join('');document.getElementById('chatList').innerHTML=chats.map((ch,i)=>`<div onclick="openChat(${i})" class="bg-zinc-900 p-3 rounded-2xl flex gap-3 items-center"><div class="w-11 h-11 rounded-full bg-pink-600 flex items-center justify-center font-black">${ch.name[0]}</div><div class="flex-1"><b>${ch.name}</b><div class="text-xs text-zinc-400">${ch.last}</div></div></div>`).join('');updateCoins();}
+function likeReel(
